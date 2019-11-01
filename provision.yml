@@ -1,0 +1,46 @@
+- hosts: webservers
+  vars:
+    service_: proxy.conf
+    path_dest: /etc/httpd/conf.d/
+  remote_user: devops
+  become: true
+  tasks:
+  - name: Install Apache Webserver
+    yum:
+      pkg: httpd
+      state: latest
+  - name: Copy proxy.conf to remote server
+    copy:
+      src: "{{ service_ }}"
+      dest: "{{ path_dest }}{{ service_ }}"
+  - name: Enable Apache on system reboot
+    service:
+      name: httpd
+      enabled: yes
+    notify: restart apache
+  handlers:
+  - name: restart apache
+    service:
+      name: httpd
+      state: restarted
+
+- hosts: appservers
+  remote_user: devops
+  become: true
+  vars:
+    project_root: /var/www/html
+  tasks:
+  - name: Install Tomcat Appserver
+    yum:
+      pkg: tomcat, tomcat-webapps, tomcat-admin-webapps
+      state: latest
+  - name: Enable Tomcat on system and reboot
+    service:
+      name: tomcat
+      enabled: yes
+    notify: restart tomcat
+  handlers:
+  - name: restart tomcat
+    service:
+      name: tomcat
+      state: restarted
