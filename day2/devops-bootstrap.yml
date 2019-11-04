@@ -1,0 +1,21 @@
+- hosts: "all"
+  tasks:
+  - name: "Create user group"
+    group:
+      name: "devops"
+      state: present
+  - name: "Create user accounts"
+    user:
+      name: "devops"
+      groups: "devops"
+  - name: "Add authorized keys"
+    authorized_key:
+      user: "devops"
+      state: present
+      key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+    with_fileglob: /root/.ssh/id_rsa.pub
+  - name: "Allow admin users to sudo without a password"
+    lineinfile:
+      dest: "/etc/sudoers"
+      state: "present"
+      line: "devops ALL=(ALL) NOPASSWD: ALL"

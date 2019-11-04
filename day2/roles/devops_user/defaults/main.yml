@@ -1,0 +1,5 @@
+---
+# defaults file for devops_user
+user_: devops
+group_: devops
+#gid_: 1234

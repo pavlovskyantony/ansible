@@ -1,0 +1,18 @@
+---
+# Here are variables related to the Tomcat installation
+usr_: tomcat
+group_: tomcat
+gid_: 1010
+home_dir: /usr/share/tomcat
+tomcat_ver: 7.0.61
+tomcat_home: /opt/apache-tomcat
+cat_home: /usr/share/tomcat
+cat_base: /usr/share/tomcat
+
+http_port: 8080
+https_port: 8443
+
+# This will configure a default manager-gui user:
+
+admin_username: tomcat
+admin_password: tomcat

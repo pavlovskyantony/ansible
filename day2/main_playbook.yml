@@ -1,0 +1,23 @@
+---
+- hosts: servers
+  remote_user: devops
+  become: true
+
+  roles:
+    - common
+    - devops_user
+
+- hosts: webservers
+  remote_user: devops
+  become: true
+
+  roles:
+    - httpd
+
+- hosts: appservers
+  remote_user: devops
+  become: true
+
+  roles:
+    - tomcat
+

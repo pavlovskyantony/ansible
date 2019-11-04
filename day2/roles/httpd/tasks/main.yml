@@ -1,0 +1,27 @@
+---
+# tasks file for httpd
+- name: install one specific version of Apache
+  yum:
+    name: httpd-{{ httpd_ver }}.el7.centos
+    state: present
+  tag:
+    - installhttpd
+
+- name: Copy proxy.conf to remote server
+  stat:
+    path: "{{ path_dest }}{{ service_ }}"
+  register: copy_result
+
+- name: Dont copy proxy.conf to remote server if it exists
+  copy:
+    src: "{{ service_ }}"
+    dest: "{{ path_dest }}{{ service_ }}"
+  when: copy_result.stat.exists == False
+  tag:
+    - copyproxyfile
+
+- name: Enable Apache on system reboot
+  service:
+    name: httpd
+    enabled: yes
+  notify: restart apache

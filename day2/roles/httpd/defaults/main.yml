@@ -1,0 +1,5 @@
+---
+# defaults file for httpd
+httpd_ver: 2.4.6-90
+service_: proxy.conf
+path_dest: /etc/httpd/conf.d/

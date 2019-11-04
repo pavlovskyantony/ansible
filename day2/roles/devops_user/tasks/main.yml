@@ -1,0 +1,22 @@
+---
+# tasks file for devops_user
+- name: "Create user group"
+  group:
+    name: "{{ group_ }}"
+#    gid: "{{ gid_ }}"
+    state: present
+- name: "Create user accounts"
+  user:
+    name: "{{ user_ }}"
+    groups: "{{ group_ }}"
+- name: "Add authorized keys"
+  authorized_key:
+    user: "{{ user_ }}"
+    state: present
+    key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+  with_fileglob: /root/.ssh/id_rsa.pub
+- name: "Allow admin users to sudo without a password"
+  lineinfile:
+    dest: "/etc/sudoers"
+    state: "present"
+    line: "devops ALL=(ALL) NOPASSWD: ALL"

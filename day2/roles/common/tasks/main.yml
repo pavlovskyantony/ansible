@@ -1,0 +1,25 @@
+---
+# tasks file for common
+
+- name: YUM Update
+  yum:
+    name: '*'
+    state: latest
+    exclude: kernel*
+
+- name: Create ansible facts.d directory for custom variables
+  file:
+    path: "{{ folder }}"
+    state: directory
+
+- name: Check that the .conf exists
+  stat:
+    path: "{{ folder }}{{ name_file }}"
+  register: stat_result
+
+- name: Touch fact file with proper permissions
+  file:
+    path: "{{ folder }}{{ name_file }}"
+    state: touch
+    mode: "a=rw"
+  when: stat_result.stat.exists == False

@@ -1,0 +1,24 @@
+---
+# handlers file for java
+- name: Get java version. Make facts dir.
+  file:
+    path: /etc/ansible/facts.d
+    state: directory
+  become: yes
+  listen: save java fact
+
+- name: Get java version. Read version.
+  shell: java -version |& awk -F'"' '{print $2}'
+  register: java_version
+  changed_when: no
+  listen: save java fact
+
+- name: Get java version. Save to file.
+  copy:
+    content: |
+      {
+        "version": "{{ java_version.stdout }}"
+      }
+    dest: /etc/ansible/facts.d/java.fact
+  become: yes
+  listen: save java fact
