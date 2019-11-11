@@ -1,0 +1,41 @@
+# Main playbook
+- hosts: 127.0.0.1
+  connection: local
+  #remote_user: root
+  #become: true
+
+  roles:
+    - role: docker-preinstall
+      tags:
+        - preinstall
+
+    - role: docker-install
+      vars:
+        - docker_package: docker-ce
+      tags:
+        - install
+
+    - role: docker-tests
+      tags:
+        - tests
+        - never
+
+    - role: user
+      vars:
+        username: student
+        tasks_:
+          - add_user
+      tags:
+        - user
+
+#- name: "Playbook: Install requirements for Docker"
+#  import_playbook: docker_preinstall.yml
+
+#- name: "Playbook: Install Docker"
+#  import_playbook: docker_install.yml
+
+#- name: "Playbook: create user"
+#  import_playbook: user.yml
+
+#- name: "Playbook: tests docker"
+#  import_playbook: docker_tests.yml

@@ -1,0 +1,31 @@
+---
+# tasks file for docker-tests
+- name: "Check if httpd process running"
+  shell: docker info | grep 'Server Version' | awk '{print $3}'
+  register: docker_version
+  changed_when: False
+  failed_when: docker_version.stdout == ''
+
+- name: "Current time"
+  shell: date -u
+  register: current_time
+  changed_when: False
+
+- name: "Check Docker PID"
+  shell: ps -aux | grep dockerd | awk '{print $2}'
+  register: docker_pid
+  changed_when: False
+  failed_when: docker_version.stdout == ''
+
+- name: "Check Docker hello-world"
+  shell: docker run hello-world | grep 'Hello from Docker!'
+  register: docker_hello
+  changed_when: False
+  failed_when: docker_version.stdout == ''
+
+- name: "Check Docker hello-world"
+  shell: systemctl status docker | grep running
+  register: docker_runn
+  changed_when: False
+  failed_when: docker_version.stdout == '' or docker_version.stdout == 'stopped'
+
