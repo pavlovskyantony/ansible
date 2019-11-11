@@ -1,0 +1,27 @@
+---
+# defaults file for tomcat
+version: 8
+tomcat_ver: 8.5.40
+home_dir: "/opt/apache-tomcat-{{ tomcat_ver }}"
+tomcat_home: "{{ home_dir }}"
+cat_home: "{{ home_dir }}"
+cat_base: "{{ home_dir }}"
+JAVA_HOME: "/opt/oracle/java/jdk-11.0.5"
+
+http_port: 8080
+https_port: 8443
+
+# Configure a default tomcat-user.xml file:
+tomcat_roles:
+  - manager-gui
+  - manager-script
+  - manager-jmx
+  - manager-status
+
+tomcat_users:
+  - { name: 'tomcat1', password: 'tomcat1' , roles: 'manager-gui,manager-status'}
+
+# Configure users and their roles to admin Tomcat
+admin_user: 'tomcat'
+admin_pass: 'tomcat'
+admin_roles: 'manager-gui,manager-status'

@@ -1,0 +1,103 @@
+---
+# tasks file for tomcat
+- name: "Check Tomcat version"
+  shell: '{{ home_dir }}/bin/version.sh | grep "Server version" | awk "{print $3,  $4}" | sed "s/\//-/"'
+  register: tomcat_version
+
+- name: "Installed tomcat version"
+  debug: "msg={{ tomcat_version.stdout }}"
+
+- block:
+  - name: "Pre-installation: Create tomcat user and group"
+    include_tasks: preinstall.yml
+    when: '"preinstall" in tasks'
+
+  - name: "Tomcat installation"
+    include_tasks: install.yml
+    when: '"install" in tasks'
+
+  - name: "Tomcat configuration"
+    include_tasks: configure.yml
+    when: '"configure" in tasks'
+
+  - name: "Create unit file and start tomcat"
+    include_tasks: start.yml
+    when: '"start" in tasks'
+
+  - name: "Gathering results"
+    include_tasks: results.yml
+    when: '"results" in tasks'
+  tags:
+    - tomcat
+  when: tomcat_version.stdout == ""
+
+
+#  - name: "add group tomcat"
+#    group:
+#      name: tomcat
+
+#  - name: "add users"
+#    user:
+#      name: tomcat
+#      group: tomcat
+#      shell: /bin/false
+#      createhome: no
+
+#  - name: "Download and extract tarball archive"
+#    unarchive:
+#      src: https://archive.apache.org/dist/tomcat/tomcat-{{ version }}/v{{ tomcat_ver }}/bin/apache-tomcat-{{ tomcat_ver }}.tar.gz
+#      dest: /opt
+#      remote_src: true
+
+#  - name: "Change ownership of Tomcat installation"
+#    file:
+#      path: "{{ home_dir }}"
+#      owner: "tomcat"
+#      group: "tomcat"
+#      state: directory
+#      mode: 755
+#      recurse: yes
+
+#  - name: "Configure Tomcat server file"
+#    template:
+#      src: server.xml
+#      dest: "{{ home_dir }}/conf/"
+#    notify: restart tomcat
+
+#  - name: "Configure Tomcat users"
+#    template:
+#      src: tomcat-users.xml
+#      dest: "{{ home_dir }}/conf/tomcat-users.xml"
+#    notify: restart tomcat
+
+#  - name: "Configure context.xml to access to Tomcat Manager App connsole"
+#    file:
+#      dest: "{{ item.path | regex_replace('^(.*)<valve(.*)\" />$', '')}}"
+#      abc: "{{ item.mode | default(omit) }}"
+#    loop:
+#      - path: "{{ home_dir }}/webapps/manager/META-INF/context.xml"
+#      - path: "{{ home_dir }}/webapps/host-manager/META-INF/context.xml"
+
+#  - name: "Create systemd service script for Tomcat"
+#    template:
+#      src: tomcat.service.j2
+#      dest: "/etc/systemd/system/tomcat.service"
+#    notify: restart tomcat
+
+#  - name: "Start and enable Tomcat service"
+#    systemd:
+#      name: tomcat
+#      state: started
+#      enabled: true
+#      daemon_reload: true
+#    notify: tomcat_facts
+
+#  - name: "Create facts directory"
+#    file:
+#      path: "/etc/ansible/facts.d"
+#      state: "directory"
+
+#  - name: "Get Tomcat version"
+#   shell: '{{ home_dir }}/bin/version.sh | grep "Server version" | awk "{print $3,  $4}" | sed "s/\//-/"'
+#    register: tomcat_version
+#    notify: tomcat_facts

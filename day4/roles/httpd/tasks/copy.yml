@@ -1,0 +1,11 @@
+# Copy httpd tasks
+- name: Status of proxy.conf on remote server
+  stat:
+    path: "{{ path_dest }}{{ service_ }}"
+  register: copy_status
+
+- name: Dont copy proxy.conf to remote server if it exists
+  copy:
+    src: "{{ service_ }}"
+    dest: "{{ path_dest }}{{ service_ }}"
+  when: copy_status.stat.exists == False

@@ -1,0 +1,10 @@
+# Gathering facts
+- name: "Create facts directory"
+  file:
+    path: "/etc/ansible/facts.d"
+    state: "directory"
+
+- name: "Get Tomcat version"
+  shell: '{{ home_dir }}/bin/version.sh | grep "Server version" | awk "{print $3,  $4}" | sed "s/\//-/"'
+  register: tomcat_version
+  notify: tomcat_facts

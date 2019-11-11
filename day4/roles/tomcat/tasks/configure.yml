@@ -1,0 +1,21 @@
+# Configure Tomcat
+- name: "Change ownership of Tomcat installation"
+  file:
+    path: "{{ home_dir }}"
+    owner: tomcat
+    group: tomcat
+    state: directory
+    mode: '0755'
+    recurse: yes
+
+- name: "Configure Tomcat server file"
+  template:
+    src: server.xml
+    dest: "{{ home_dir }}/conf/"
+  notify: restart tomcat
+
+- name: "Configure Tomcat users"
+  template:
+    src: tomcat-users.xml
+    dest: "{{ home_dir }}/conf/tomcat-users.xml"
+  notify: restart tomcat

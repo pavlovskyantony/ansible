@@ -1,0 +1,13 @@
+# Display results of installation
+- block:
+  - name: Result of installation
+    debug:
+      msg: "Failed - Java is not installed"
+    when: java_result is failed
+
+  - name: Result of installation
+    debug:
+      msg: "Success - Java is installed"
+    when: java_result is success
+  tags:
+    - never

@@ -1,0 +1,13 @@
+# Enable and start httpd
+- name: Enable Apache on system reboot
+  service:
+    name: httpd
+    enabled: yes
+  notify:
+    - restart apache
+    - httpd facts
+
+- name: Ensure httpd is running
+  service:
+    name: httpd
+    state: started

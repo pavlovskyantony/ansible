@@ -1,0 +1,6 @@
+# Install tomcat
+- name: "Download and extract tarball archive"
+  unarchive:
+    src: https://archive.apache.org/dist/tomcat/tomcat-{{ version }}/v{{ tomcat_ver }}/bin/apache-tomcat-{{ tomcat_ver }}.tar.gz
+    dest: /opt
+    remote_src: true

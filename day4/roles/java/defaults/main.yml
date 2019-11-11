@@ -1,0 +1,7 @@
+---
+# defaults file for java
+#java_ver: 13.0.1
+java_ver: 11.0.5
+java_dest: /opt/oracle/java/
+full_java_name: "{{ java_dest }}jdk-{{ java_ver }}"
+java_env_file: /etc/profile.d/java.sh

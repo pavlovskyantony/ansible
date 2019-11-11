@@ -1,0 +1,45 @@
+---
+# tasks file for user
+- name: "Create user groups"
+  include_tasks: add_group.yml
+  when: '"add_group" in tasks'
+
+- name: "Create users"
+  include_tasks: add_user.yml
+  when: '"add_user" in tasks'
+
+- name: "Copy authorized keys"
+  include_tasks: add_key.yml
+  when: '"add_key" in tasks'
+
+- name: "Add users to sudoers"
+  include_tasks: add_sudoers.yml
+  when: '"add_sudoers" in tasks'
+
+#- name: Add group
+#  group:
+#    name: "{{ group_name }}"
+#    gid: "{{ gid }}"
+#    state: present
+
+#- name: Add User
+#  user:
+#    name: "{{ username }}"
+#    uid: "{{ uid }}"
+#    groups: "{{ groups_name }}"
+#    home: "{{ home_dir | default(omit) }}"
+#    state: present
+#    createhome: yes
+
+#- name: Add authorized keys
+#  authorized_key:
+#    user: "{{ username }}"
+#    state: present
+#    key: "{{ lookup('file', 'keys/ansible.pub') }}"
+#  with_fileglob: keys/ansible.pub
+
+#- name: Add user to sudoers
+#  lineinfile:
+#    dest: "/etc/sudoers"
+#    state: "present"
+#    line: "{{ user_add_passwd }}"

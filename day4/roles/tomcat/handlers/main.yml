@@ -1,0 +1,15 @@
+---
+# handlers file for tomcat
+- name: restart tomcat
+  service:
+    name: tomcat
+    state: restarted
+  listen: restart tomcat
+
+- name: tomcat_facts
+  copy:
+    content: >
+      {
+        "Tomcat version": "{{ tomcat_version }}"
+      }
+    dest: /etc/ansible/facts.d/tomcat_facts.fact

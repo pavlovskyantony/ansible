@@ -1,0 +1,5 @@
+- name: "install one specific version of Apache"
+  yum:
+    name: httpd-{{ httpd_ver }}.el7.centos
+    state: present
+  register: httpd_version

@@ -1,0 +1,19 @@
+# users.role
+- hosts: servers
+  remote_user: root
+  become: true
+  gather_facts: no
+
+  roles:
+    - role: user
+      vars:
+        tasks:
+          - add_groups
+          - add_user
+          - add_keys
+          - add_sudoers
+      loop:
+        - { group_name: 'devops', gid: '123', username: 'devops', uid: '123'}
+        - { group_name: 'devops2', gid: '124', username: 'devops2', uid: '124'}
+  tags:
+    - users

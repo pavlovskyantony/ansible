@@ -1,0 +1,11 @@
+# Install Java
+- name: "Copy java archive"
+    copy:
+      src: "jdk-{{ java_ver }}_linux-x64_bin.tar.gz"
+      dest: "{{ java_dest }}"
+
+- name: "Java installation"
+  unarchive:
+    src: "{{ java_dest }}jdk-{{ java_ver }}_linux-x64_bin.tar.gz"
+    dest: "{{ java_dest }}"
+    remote_src: yes

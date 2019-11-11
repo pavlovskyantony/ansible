@@ -1,0 +1,10 @@
+{{ ansible_managed | comment }}
+
+    {% for domain in domains %}
+<VirtualHost {{ domain.name }}:80>
+    ProxyPreserveHost On
+    ProxyPass / http://{{ domain.ip }}:8080/
+    ProxyPassReverse / http://{{ domain.ip }}:8080/
+</VirtualHost>
+
+    {% endfor %}

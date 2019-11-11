@@ -1,0 +1,17 @@
+- hosts: localhost
+  gather_facts: no
+
+  vars:
+    domains:
+    - { name: 'example1.com', ip: '192.168.56.102'}
+    - { name: 'example2.com', ip: '192.168.56.103'}
+    - { name: 'example3.com', ip: '192.168.56.104'}
+    - { name: 'example4.com', ip: '192.168.56.105'}
+
+  tasks:
+  - name: "Template example"
+    template:
+      src: /opt/ansible/proxy.j2
+      dest: /opt/ansible/proxy.conf
+    loop:
+      - domains

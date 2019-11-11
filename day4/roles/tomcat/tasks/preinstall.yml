@@ -1,0 +1,11 @@
+# Create group and user tomcat
+- name: "add group tomcat"
+  group:
+    name: tomcat
+
+- name: "add users"
+  user:
+    name: tomcat
+    group: tomcat
+    shell: /bin/false
+    createhome: no

@@ -1,0 +1,11 @@
+---
+# defaults file for user
+group_name: devops
+gid: 123
+username: devops
+uid: 123
+groups_name:
+  - wheel
+  - vagrant
+home_dir: /home/{{ username }}
+user_add_passwd: "{{ username }} ALL=(ALL) NOPASSWD: ALL"

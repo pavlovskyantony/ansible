@@ -1,0 +1,10 @@
+# Create facts folder
+- name: Create facts directory
+  file:
+    path: "/etc/ansible/facts.d"
+    state: "directory"
+
+- name: "Get HHTPD version"
+  shell: httpd -v 2>&1 | grep version | awk '{print $3}' | sed 's/\//-/'
+  register: httpd_version
+  notify: httpd facts

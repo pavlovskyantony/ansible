@@ -1,0 +1,25 @@
+# appservers role
+
+- hosts: appservers
+  remote_user: devops
+  become: true
+
+  roles:
+    - role: java
+      vars:
+        tasks:
+          - install
+          - configure
+          - facts
+          - results
+
+    - role: tomcat
+      vars:
+        tasks:
+          - preinstall
+          - install
+          - configure
+          - start
+          - facts
+  tags:
+    - appservers

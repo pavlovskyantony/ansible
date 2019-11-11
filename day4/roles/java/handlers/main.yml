@@ -1,0 +1,10 @@
+---
+# handlers file for java
+- name: java_facts
+  copy:
+    content: >
+      {
+        "Java version": "{{ java_version }}"
+      }
+    dest: /etc/ansible/facts.d/java_facts.fact
+  become: yes

@@ -1,0 +1,51 @@
+# Main playbook
+
+- hosts: servers
+- name: "Playbook: create users"
+  import_playbook: users.yml
+  tags:
+    - base
+
+- name: "Playbook: sanity checks"
+  import_playbook: sanity_checks.yml
+
+- hosts: webservers
+- name: "Playbook: install HTTPD"
+  import_playbook: webservers.yml
+  tags:
+    - advanced
+
+- hosts: appservers
+- name: "Playbook: install Java, Tomcat"
+  import_playbook: appservers.yml
+  tags:
+    - advanced
+
+#- hosts: servers
+#  remote_user: root
+#  become: true
+#  gather_facts: no
+#
+#  roles:
+#    - role: user
+
+#- hosts: webservers
+#  remote_user: devops
+#  become: true
+#
+#  roles:
+#    - role: httpd
+#      when:
+#        ansible_local.httpd is not defined
+
+#- hosts: appservers
+#  remote_user: devops
+#  become: true
+#
+#  roles:
+#    - role: java
+#      when:
+#        ansible_local.java is not defined
+#    - role: tomcat
+#      when:
+#        ansible_local.tomcat is not defined

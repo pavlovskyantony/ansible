@@ -1,0 +1,6 @@
+# Add users to sudoers
+- name: "Add user to sudoers"
+  lineinfile:
+    dest: "/etc/sudoers"
+    state: "present"
+    line: "{{ user_add_passwd }}"

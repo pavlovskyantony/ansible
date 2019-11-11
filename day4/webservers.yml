@@ -1,0 +1,18 @@
+# webservers role
+- hosts: webservers
+  remote_user: devops
+  become: true
+
+  roles:
+    - role: httpd
+      vars:
+        tasks:
+          - yum
+          - copy
+          - start
+          - facts
+  tags:
+    - webservers
+
+#      when:
+#        ansible_Java tasks:local.httpd is not defined

@@ -1,0 +1,67 @@
+---
+# Sanity checks role
+- hosts: webservers
+
+  tasks:
+    - block:
+        - name: "Check if httpd process running"
+          shell: ps -ef | grep -v grep | grep httpd
+          register: sanity_httpd_ps
+          args:
+            warn: false
+        - debug:
+            var: sanity_httpd_ps.stdout_lines
+
+        - name: "Check httpd status"
+          shell: systemctl status httpd | grep "running"
+          register: sanity_httpd_st
+          args:
+            warn: false
+        - debug:
+            var: sanity_httpd_st.stdout_lines
+  tags:
+    - never
+    - sanitychecks
+
+- hosts: appservers
+
+  tasks:
+    - block:
+        - name: "Java Version"
+          shell: java -version 2>&1 | grep version | awk '{print $3}' | sed 's/"//g'
+          register: sanity_java_ver
+        - debug:
+            var: sanity_java_ver.stdout_lines
+
+        - name: "Java Build"
+          shell: java -version 2>&1 | grep ".build"
+          register: sanity_java_bld
+        - debug:
+            var: sanity_java_bld.stdout
+
+        - name: "Check Tomcat Process Running"
+          shell: ps -eo cmd | grep -v grep | grep "tomcat"
+          register: sanity_tomcat_ps
+          args:
+            warn: false
+        - debug:
+            var: sanity_tomcat_ps.stdout_lines
+
+        - name: "Check Tomcat responds code 200"
+          shell: curl -sL -w "%{http_code}" localhost:8080 -o /dev/null | grep 200
+          register: sanity_tomcat_rc
+          args:
+            warn: false
+        - debug:
+            var: sanity_tomcat_rc.stdout_lines
+
+        - name: "Check Tomcat homepage on port 8080"
+          shell: curl -s localhost:8080 | grep '<title>Apache Tomcat'
+          register: sanity_tomcat_
+          args:
+            warn: false
+        - debug:
+            var: sanity_tomcat_.stdout_lines
+  tags:
+    - never
+    - sanitychecks
